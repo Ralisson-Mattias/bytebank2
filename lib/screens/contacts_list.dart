@@ -1,16 +1,19 @@
-import 'package:bytebank2/database/app_database.dart';
+import 'package:bytebank2/database/dao/contact_dao.dart';
 import 'package:bytebank2/models/contact.dart';
 import 'package:bytebank2/screens/contact_form.dart';
 import 'package:flutter/material.dart';
 
 class ContactsList extends StatefulWidget {
-  ContactsList({Key? key}) : super(key: key);
+  const ContactsList({Key? key}) : super(key: key);
 
   @override
   State<ContactsList> createState() => _ContactsListState();
 }
 
 class _ContactsListState extends State<ContactsList> {
+
+  final ContactDao _contactDao = ContactDao();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -18,9 +21,10 @@ class _ContactsListState extends State<ContactsList> {
         title: const Text("Contatos"),
       ),
       body: FutureBuilder<List<Contact>>(
-        initialData: [],
-        future: findAll(),
+        initialData: const [],
+        future: _contactDao.findAll(),
         builder: (context, snapshot) {
+          // ignore: unrelated_type_equality_checks
           if (snapshot.connectionState == "waiting") {
             return Center(
               child: Column(
@@ -58,7 +62,7 @@ class _ContactsListState extends State<ContactsList> {
         onPressed: () {
           Navigator.of(context).push(
             MaterialPageRoute(
-              builder: (context) => ContactForm(),
+              builder: (context) => const ContactForm(),
             ),
           ).then((value) {
             setState(() {
